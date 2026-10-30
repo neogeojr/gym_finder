@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { apiErrorMessage } from "@/lib/errors";
@@ -18,7 +18,7 @@ export default function SignupPage() {
 
   const canSubmit = form.email.trim() !== "" && form.password !== "";
 
-  const onSignup = async (e: FormEvent) => {
+  const onSignup = async (e: SubmitEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
