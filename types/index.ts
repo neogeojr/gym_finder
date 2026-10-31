@@ -29,6 +29,9 @@ export interface Gym {
   updatedAt: string;
 }
 
+// The fields an owner may set on a gym.
+export type GymInput = Pick<Gym, "name" | "address" | "phone" | "daypass">;
+
 export interface Pass {
   _id: string;
   userId: string;
