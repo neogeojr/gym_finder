@@ -74,3 +74,24 @@ export async function PATCH(request: NextRequest, { params }: RouteContext) {
     );
   }
 }
+
+export async function DELETE(request: NextRequest, { params }: RouteContext) {
+  try {
+    await connectDB();
+
+    const { gymId } = await params;
+    const found = await findOwnedGym(request, gymId);
+    if (found.response) return found.response;
+
+    // Commit 30 also deletes this gym's passes here, once the Pass model exists.
+    await found.gym.deleteOne();
+
+    return NextResponse.json({ message: "Gym deleted.", success: true });
+  } catch (error) {
+    console.error(`Gym delete failed. ${errorMessage(error)}`);
+    return NextResponse.json(
+      { error: "Something went wrong on the server." },
+      { status: 500 },
+    );
+  }
+}
