@@ -6,14 +6,34 @@ import { cleanGymInput } from "@/lib/gymInput";
 import { errorMessage } from "@/lib/errors";
 import Gym, { type IGym } from "@/models/Gym";
 
-// In Next.js 16, params is a Promise.
 type RouteContext = { params: Promise<{ gymId: string }> };
+
+export async function GET(_request: NextRequest, { params }: RouteContext) {
+  try {
+    await connectDB();
+
+    const { gymId } = await params;
+    const gym = mongoose.isValidObjectId(gymId)
+      ? await Gym.findById(gymId)
+      : null;
+    if (!gym) {
+      return NextResponse.json({ error: "Gym not found." }, { status: 404 });
+    }
+
+    return NextResponse.json({ data: gym });
+  } catch (error) {
+    console.error(`Could not load the gym. ${errorMessage(error)}`);
+    return NextResponse.json(
+      { error: "Something went wrong on the server." },
+      { status: 500 },
+    );
+  }
+}
 
 type OwnedGym =
   | { gym: HydratedDocument<IGym>; response?: undefined }
   | { gym?: undefined; response: NextResponse };
 
-// Finds the gym, but only for the owner who created it.
 async function findOwnedGym(
   request: NextRequest,
   gymId: string,
@@ -83,7 +103,6 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
     const found = await findOwnedGym(request, gymId);
     if (found.response) return found.response;
 
-    // Commit 30 also deletes this gym's passes here, once the Pass model exists.
     await found.gym.deleteOne();
 
     return NextResponse.json({ message: "Gym deleted.", success: true });
