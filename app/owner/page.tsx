@@ -4,13 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { daypassLabel } from "@/components/GymCard";
 import { apiErrorMessage, apiErrorStatus } from "@/lib/errors";
 import type { Gym } from "@/types";
-
-const daypassLabel = ({ available, price }: Gym["daypass"]) => {
-  if (!available) return "No day pass";
-  return price === 0 ? "Free day pass" : `Day pass $${price}`;
-};
 
 export default function OwnerDashboardPage() {
   const [gyms, setGyms] = useState<Gym[]>([]);
