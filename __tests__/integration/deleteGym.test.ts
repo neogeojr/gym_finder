@@ -2,6 +2,7 @@ import type { Types } from "mongoose";
 import { DELETE } from "@/app/api/gyms/[gymId]/route";
 import { GET } from "@/app/api/owner/gyms/route";
 import Gym from "@/models/Gym";
+import Pass from "@/models/Pass";
 import {
   startDb,
   stopDb,
@@ -36,6 +37,25 @@ describe("DELETE /api/gyms/[gymId]", () => {
     const res = await remove(String(gym._id), cookie);
     expect(res.status).toBe(200);
     expect(await Gym.countDocuments()).toBe(0);
+  });
+
+  test("Deleting a gym also deletes its passes, and only its passes. ", async () => {
+    const { user, cookie } = await makeUser({ role: "owner" });
+    const member = await makeUser();
+    const gym = await makeGym(user._id);
+    const otherGym = await makeGym(user._id, "Other Gym");
+    const pass = (gymId: Types.ObjectId, code: string) => ({
+      userId: member.user._id,
+      gymId,
+      code,
+      validFrom: new Date(),
+      validTo: new Date(),
+    });
+    await Pass.create([pass(gym._id, "AAA111"), pass(otherGym._id, "BBB222")]);
+
+    await remove(String(gym._id), cookie);
+    const left = await Pass.find();
+    expect(left.map((p) => p.code)).toEqual(["BBB222"]);
   });
 
   test("Another owner gets 403 and the gym stays", async () => {

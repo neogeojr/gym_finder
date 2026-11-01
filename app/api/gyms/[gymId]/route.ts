@@ -5,6 +5,7 @@ import { requireRole } from "@/lib/auth";
 import { cleanGymInput } from "@/lib/gymInput";
 import { errorMessage } from "@/lib/errors";
 import Gym, { type IGym } from "@/models/Gym";
+import Pass from "@/models/Pass";
 
 type RouteContext = { params: Promise<{ gymId: string }> };
 
@@ -17,7 +18,7 @@ export async function GET(_request: NextRequest, { params }: RouteContext) {
       ? await Gym.findById(gymId)
       : null;
     if (!gym) {
-      return NextResponse.json({ error: "Gym not found." }, { status: 404 });
+      return NextResponse.json({ error: "Gym not found. " }, { status: 404 });
     }
 
     return NextResponse.json({ data: gym });
@@ -103,6 +104,7 @@ export async function DELETE(request: NextRequest, { params }: RouteContext) {
     const found = await findOwnedGym(request, gymId);
     if (found.response) return found.response;
 
+    await Pass.deleteMany({ gymId: found.gym._id });
     await found.gym.deleteOne();
 
     return NextResponse.json({ message: "Gym deleted.", success: true });

@@ -32,6 +32,9 @@ export interface Gym {
 // The fields an owner may set on a gym.
 export type GymInput = Pick<Gym, "name" | "address" | "phone" | "daypass">;
 
+// Only "active" is used in version 1; redeemed and cancelled come later.
+export type PassStatus = "active" | "redeemed" | "cancelled";
+
 export interface Pass {
   _id: string;
   userId: string;
@@ -39,7 +42,7 @@ export interface Pass {
   code: string;
   validFrom: string;
   validTo: string;
-  status: string;
+  status: PassStatus;
   createdAt: string;
   updatedAt: string;
 }
