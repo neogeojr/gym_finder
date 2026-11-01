@@ -1,9 +1,44 @@
+import type { QueryFilter } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { requireRole } from "@/lib/auth";
 import { cleanGymInput } from "@/lib/gymInput";
 import { errorMessage } from "@/lib/errors";
-import Gym from "@/models/Gym";
+import Gym, { type IGym } from "@/models/Gym";
+
+const MAX_RESULTS = 50;
+
+const escapeRegex = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+export async function GET(request: NextRequest) {
+  try {
+    await connectDB();
+
+    const q = (request.nextUrl.searchParams.get("q") ?? "").trim();
+
+    const filter: QueryFilter<IGym> = {};
+    if (q) {
+      const match = new RegExp(escapeRegex(q), "i");
+      filter.$or = [
+        { name: match },
+        { "address.city": match },
+        { "address.state": match },
+        { "address.zipCode": match },
+      ];
+    }
+
+    const gyms = await Gym.find(filter).sort({ name: 1 }).limit(MAX_RESULTS);
+
+    return NextResponse.json({ data: gyms });
+  } catch (error) {
+    console.error(`Gym search failed. ${errorMessage(error)}`);
+    return NextResponse.json(
+      { error: "Something went wrong on the server." },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,7 +67,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(`Gym create failed. ${errorMessage(error)}`);
     return NextResponse.json(
-      { error: "Something went wrong on the server." },
+      { error: "Something went wrong on the server. " },
       { status: 500 },
     );
   }
