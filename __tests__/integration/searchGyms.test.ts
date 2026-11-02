@@ -35,7 +35,7 @@ async function seed() {
 }
 
 describe("GET /api/gyms", () => {
-  test("An empty search returns every gym, sorted by name. ", async () => {
+  test("An empty search returns every gym, sorted by name.", async () => {
     await seed();
     expect(await search()).toEqual(["A.* Club", "Bay Fitness", "Iron Works"]);
   });
@@ -48,7 +48,7 @@ describe("GET /api/gyms", () => {
     expect(await search("85281")).toEqual(["A.* Club"]);
   });
 
-  test("Special characters are plain text ", async () => {
+  test("Special characters are plain text", async () => {
     await seed();
     expect(await search(".*")).toEqual(["A.* Club"]);
     expect(await search("(")).toEqual([]);

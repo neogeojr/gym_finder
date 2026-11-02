@@ -13,7 +13,7 @@ const gymBase = {
 };
 
 describe("Gym model", () => {
-  test("A gym with the required fields is valid ", () => {
+  test("A gym with the required fields is valid", () => {
     expect(new Gym(gymBase).validateSync()).toBeUndefined();
   });
 

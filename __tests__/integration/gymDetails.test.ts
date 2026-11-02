@@ -17,7 +17,7 @@ const getGym = (gymId: string) =>
   GET(req(`/api/gyms/${gymId}`), { params: Promise.resolve({ gymId }) });
 
 describe("GET /api/gyms/[gymId]", () => {
-  test("Returns the gym to anyone, even a guest. ", async () => {
+  test("Returns the gym to anyone, even a guest.", async () => {
     const { user } = await makeUser({ role: "owner" });
     const gym = await Gym.create({
       ownerId: user._id,

@@ -5,7 +5,7 @@ import User, { type IUser } from "@/models/User";
 import type { Role } from "@/types";
 import { errorMessage } from "@/lib/errors";
 
-export const getDataFromToken = (request: NextRequest): string => {
+const getDataFromToken = (request: NextRequest): string => {
   try {
     const token = request.cookies.get("token")?.value || "";
     const decodedToken = jwt.verify(

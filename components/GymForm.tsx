@@ -18,7 +18,7 @@ export interface GymFormValues {
 
 type TextField = Exclude<keyof GymFormValues, "daypassAvailable">;
 
-export const emptyForm: GymFormValues = {
+const emptyForm: GymFormValues = {
   name: "",
   street: "",
   city: "",
@@ -40,7 +40,7 @@ export const toForm = (gym: GymInput): GymFormValues => ({
   daypassPrice: gym.daypass?.price ? String(gym.daypass.price) : "",
 });
 
-export const toPayload = (form: GymFormValues): GymInput => ({
+const toPayload = (form: GymFormValues): GymInput => ({
   name: form.name,
   address: {
     street: form.street,
@@ -59,7 +59,6 @@ interface GymFormProps {
   title: string;
   initial?: GymFormValues;
   submitLabel: string;
-  // Throw to keep the form open; the form shows the server's message.
   onSubmit: (payload: GymInput) => Promise<void>;
 }
 

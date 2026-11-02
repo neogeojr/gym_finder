@@ -32,7 +32,7 @@ async function logIn() {
 }
 
 describe("login page", () => {
-  test("The button is disabled until email and password are filled. ", async () => {
+  test("The button is disabled until email and password are filled.", async () => {
     render(<LoginPage />);
     const button = screen.getByRole("button", { name: "Log in" });
     expect(button).toBeDisabled();
@@ -59,7 +59,7 @@ describe("login page", () => {
     expect(mockPush).toHaveBeenCalledWith(path);
   });
 
-  test("A wrong password shows the server message and stays on the page ", async () => {
+  test("A wrong password shows the server message and stays on the page", async () => {
     mockPost.mockRejectedValue({
       response: { status: 401, data: { error: "Invalid email or password." } },
     });

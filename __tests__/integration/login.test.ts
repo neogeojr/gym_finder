@@ -42,7 +42,10 @@ describe("login", () => {
 
   test("gives the same 401 for a wrong password and an unknown email", async () => {
     await makeUser({ email: "sam@test.com" });
-    const wrong = await doLogin({ email: "sam@test.com", password: "nope-nope" });
+    const wrong = await doLogin({
+      email: "sam@test.com",
+      password: "nope-nope",
+    });
     const unknown = await doLogin({
       email: "ghost@test.com",
       password: "nope-nope",

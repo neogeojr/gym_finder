@@ -33,7 +33,7 @@ async function fillAndSave() {
 }
 
 describe("add gym page", () => {
-  test("The price box only appears when the gym offers a day pass ", async () => {
+  test("The price box only appears when the gym offers a day pass", async () => {
     render(<NewGymPage />);
     expect(screen.queryByLabelText("Price (USD)")).not.toBeInTheDocument();
 

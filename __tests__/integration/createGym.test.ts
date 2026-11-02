@@ -41,7 +41,7 @@ describe("POST /api/gyms", () => {
     expect(await Gym.countDocuments()).toBe(0);
   });
 
-  test("An owner creates a gym and is saved as its owner ", async () => {
+  test("An owner creates a gym and is saved as its owner", async () => {
     const { user, cookie } = await makeUser({ role: "owner" });
     const res = await POST(
       req("/api/gyms", { method: "POST", body: validGym, cookie }),

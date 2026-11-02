@@ -59,7 +59,7 @@ describe("search page", () => {
     expect(screen.getByText("Bay")).toBeInTheDocument();
   });
 
-  test("Shows No gyms found when nothing matches. ", async () => {
+  test("Shows No gyms found when nothing matches.", async () => {
     mockGet.mockResolvedValue({ data: { data: [] } });
     render(<SearchClient initialQ="zzz" />);
     expect(await screen.findByText("No gyms found.")).toBeInTheDocument();

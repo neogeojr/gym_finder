@@ -18,7 +18,7 @@ export async function GET(_request: NextRequest, { params }: RouteContext) {
       ? await Gym.findById(gymId)
       : null;
     if (!gym) {
-      return NextResponse.json({ error: "Gym not found. " }, { status: 404 });
+      return NextResponse.json({ error: "Gym not found." }, { status: 404 });
     }
 
     return NextResponse.json({ data: gym });

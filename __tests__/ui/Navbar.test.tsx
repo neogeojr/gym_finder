@@ -62,10 +62,9 @@ describe("Navbar", () => {
     mockGet.mockResolvedValue({ data: { data: owner } });
     renderNavbar();
 
-    expect(await screen.findByRole("link", { name: "My gyms" })).toHaveAttribute(
-      "href",
-      "/owner",
-    );
+    expect(
+      await screen.findByRole("link", { name: "My gyms" }),
+    ).toHaveAttribute("href", "/owner");
   });
 
   test("logging out shows Login again and goes to /login", async () => {
@@ -77,7 +76,9 @@ describe("Navbar", () => {
       await screen.findByRole("button", { name: "Logout" }),
     );
 
-    expect(await screen.findByRole("link", { name: "Login" })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("link", { name: "Login" }),
+    ).toBeInTheDocument();
     expect(mockPost).toHaveBeenCalledWith("/api/users/logout");
     expect(mockPush).toHaveBeenCalledWith("/login");
   });

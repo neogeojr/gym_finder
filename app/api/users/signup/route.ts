@@ -5,7 +5,7 @@ import { cleanEmail, validateEmail, validatePassword } from "@/lib/validate";
 import { errorMessage } from "@/lib/errors";
 import User from "@/models/User";
 
-const DUPLICATE_EMAIL = "An account with that email already exists. ";
+const DUPLICATE_EMAIL = "An account with that email already exists.";
 
 export async function POST(request: NextRequest) {
   try {

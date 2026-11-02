@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(`Gym create failed. ${errorMessage(error)}`);
     return NextResponse.json(
-      { error: "Something went wrong on the server. " },
+      { error: "Something went wrong on the server." },
       { status: 500 },
     );
   }

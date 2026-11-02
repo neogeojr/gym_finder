@@ -23,7 +23,7 @@ const address = {
 };
 
 describe("my passes page", () => {
-  test("Lists passes with a gym link, or Removed gym. ", async () => {
+  test("Lists passes with a gym link, or Removed gym.", async () => {
     mockGet.mockResolvedValue({
       data: {
         data: [
@@ -52,7 +52,7 @@ describe("my passes page", () => {
     expect(mockGet).toHaveBeenCalledWith("/api/passes");
   });
 
-  test("Shows a message when there are no passes. ", async () => {
+  test("Shows a message when there are no passes.", async () => {
     mockGet.mockResolvedValue({ data: { data: [] } });
     render(<MyPassesPage />);
     expect(

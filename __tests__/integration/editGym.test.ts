@@ -36,7 +36,7 @@ const patch = (gymId: string, body: unknown, cookie?: string) =>
   });
 
 describe("PATCH /api/gyms/[gymId]", () => {
-  test("The owner can edit their gym. ", async () => {
+  test("The owner can edit their gym.", async () => {
     const { user, cookie } = await makeUser({ role: "owner" });
     const gym = await makeGym(user._id);
     const res = await patch(String(gym._id), edit, cookie);
@@ -46,7 +46,7 @@ describe("PATCH /api/gyms/[gymId]", () => {
     expect(saved?.daypass.price).toBe(15);
   });
 
-  test("Another owner gets 403 and the gym is unchanged. ", async () => {
+  test("Another owner gets 403 and the gym is unchanged.", async () => {
     const { user } = await makeUser({ role: "owner" });
     const other = await makeUser({ role: "owner" });
     const gym = await makeGym(user._id);

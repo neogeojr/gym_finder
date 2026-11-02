@@ -38,7 +38,7 @@ beforeEach(() => {
 });
 
 describe("edit gym page", () => {
-  test("The form is filled in with the gym. ", async () => {
+  test("The form is filled in with the gym.", async () => {
     render(<EditGym gymId="g1" />);
     expect(await screen.findByLabelText("Gym name")).toHaveValue("Iron Works");
     expect(screen.getByLabelText("City")).toHaveValue("Phoenix");
@@ -46,7 +46,7 @@ describe("edit gym page", () => {
     expect(screen.getByLabelText("Price (USD)")).toHaveValue(12);
   });
 
-  test("Saving sends the changes and goes to the dashboard. ", async () => {
+  test("Saving sends the changes and goes to the dashboard.", async () => {
     mockPatch.mockResolvedValue({ data: { success: true } });
     render(<EditGym gymId="g1" />);
     const name = await screen.findByLabelText("Gym name");

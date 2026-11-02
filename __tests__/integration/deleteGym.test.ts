@@ -39,7 +39,7 @@ describe("DELETE /api/gyms/[gymId]", () => {
     expect(await Gym.countDocuments()).toBe(0);
   });
 
-  test("Deleting a gym also deletes its passes, and only its passes. ", async () => {
+  test("Deleting a gym also deletes its passes, and only its passes.", async () => {
     const { user, cookie } = await makeUser({ role: "owner" });
     const member = await makeUser();
     const gym = await makeGym(user._id);
@@ -69,7 +69,7 @@ describe("DELETE /api/gyms/[gymId]", () => {
 });
 
 describe("GET /api/owner/gyms", () => {
-  test("Lists only my gyms, newest first ", async () => {
+  test("Lists only my gyms, newest first", async () => {
     const { user, cookie } = await makeUser({ role: "owner" });
     const other = await makeUser({ role: "owner" });
     await makeGym(user._id, "First");

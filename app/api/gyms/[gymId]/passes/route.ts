@@ -49,7 +49,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
     });
     if (existing) {
       return NextResponse.json(
-        { error: "You already have a pass for this gym today. " },
+        { error: "You already have a pass for this gym today." },
         { status: 409 },
       );
     }

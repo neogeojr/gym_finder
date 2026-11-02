@@ -11,7 +11,7 @@ jest.mock("next/navigation", () => ({
 beforeEach(() => jest.clearAllMocks());
 
 describe("home page", () => {
-  test("Submitting the search goes to the encoded search address. ", async () => {
+  test("Submitting the search goes to the encoded search address.", async () => {
     render(<Home />);
     await userEvent.type(
       screen.getByLabelText("Search gyms"),

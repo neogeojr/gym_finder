@@ -9,8 +9,6 @@ type CleanResult =
   | { data: GymInput; error?: undefined }
   | { data?: undefined; error: string };
 
-// Keeps only the fields an owner may set, so anything else in the request
-// (ownerId, for example) is dropped.
 export const cleanGymInput = (input: unknown): CleanResult => {
   const body = (input ?? {}) as Record<string, unknown>;
 

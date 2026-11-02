@@ -43,7 +43,7 @@ beforeEach(() => {
 });
 
 describe("gym details page", () => {
-  test("Shows the name, address, phone and day pass. ", async () => {
+  test("Shows the name, address, phone and day pass.", async () => {
     mockGet.mockResolvedValue({ data: { data: gym } });
     render(<GymDetails gymId="g1" />);
 
@@ -56,7 +56,7 @@ describe("gym details page", () => {
     expect(mockGet).toHaveBeenCalledWith("/api/gyms/g1");
   });
 
-  test("Shows Gym not found when it is missing. ", async () => {
+  test("Shows Gym not found when it is missing.", async () => {
     mockGet.mockRejectedValue({ response: { status: 404 } });
     render(<GymDetails gymId="nope" />);
     expect(await screen.findByText("Gym not found.")).toBeInTheDocument();
@@ -64,7 +64,7 @@ describe("gym details page", () => {
 });
 
 describe("claiming a day pass", () => {
-  test("Success shows the code. ", async () => {
+  test("Success shows the code.", async () => {
     mockUser = { email: "sam@test.com" };
     mockGet.mockResolvedValue({ data: { data: gym } });
     mockPost.mockResolvedValue({
@@ -86,7 +86,7 @@ describe("claiming a day pass", () => {
     ).not.toBeInTheDocument();
   });
 
-  test("A guest is sent to login. ", async () => {
+  test("A guest is sent to login.", async () => {
     mockGet.mockResolvedValue({ data: { data: gym } });
     render(<GymDetails gymId="g1" />);
 
@@ -97,7 +97,7 @@ describe("claiming a day pass", () => {
     expect(mockPost).not.toHaveBeenCalled();
   });
 
-  test("A refusal shows the server message. ", async () => {
+  test("A refusal shows the server message.", async () => {
     mockUser = { email: "sam@test.com" };
     mockGet.mockResolvedValue({ data: { data: gym } });
     mockPost.mockRejectedValue({
@@ -115,7 +115,7 @@ describe("claiming a day pass", () => {
     );
   });
 
-  test("No button when the gym has no day pass. ", async () => {
+  test("No button when the gym has no day pass.", async () => {
     mockGet.mockResolvedValue({
       data: { data: { ...gym, daypass: { available: false, price: 0 } } },
     });
