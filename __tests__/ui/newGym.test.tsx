@@ -17,9 +17,17 @@ jest.mock("react-hot-toast", () => ({
   toast: { success: jest.fn(), error: jest.fn() },
 }));
 
+let mockRole = "owner";
+jest.mock("@/context/AuthContext", () => ({
+  useAuth: () => ({ user: { role: mockRole }, loading: false }),
+}));
+
 const mockPost = axios.post as jest.Mock;
 
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockRole = "owner";
+});
 
 async function fillAndSave() {
   await userEvent.type(screen.getByLabelText("Gym name"), "Iron Works");
@@ -33,6 +41,13 @@ async function fillAndSave() {
 }
 
 describe("add gym page", () => {
+  test("A member sees Not allowed instead of the form.", () => {
+    mockRole = "regular";
+    render(<NewGymPage />);
+    expect(screen.getByText("Not allowed.")).toBeVisible();
+    expect(screen.queryByLabelText("Gym name")).not.toBeInTheDocument();
+  });
+
   test("The price box only appears when the gym offers a day pass", async () => {
     render(<NewGymPage />);
     expect(screen.queryByLabelText("Price (USD)")).not.toBeInTheDocument();
