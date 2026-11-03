@@ -48,6 +48,15 @@ describe("GET /api/gyms", () => {
     expect(await search("85281")).toEqual(["A.* Club"]);
   });
 
+  test("Every word must match, in any field, and commas are ignored", async () => {
+    await seed();
+    expect(await search("phoenix, az")).toEqual(["Iron Works"]);
+    expect(await search("Tempe AZ")).toEqual(["A.* Club"]);
+    expect(await search("iron works")).toEqual(["Iron Works"]);
+    expect(await search("phoenix ca")).toEqual([]);
+    expect(await search(" , ")).toHaveLength(3);
+  });
+
   test("Special characters are plain text", async () => {
     await seed();
     expect(await search(".*")).toEqual(["A.* Club"]);

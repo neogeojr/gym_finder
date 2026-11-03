@@ -7,6 +7,7 @@ import { errorMessage } from "@/lib/errors";
 import Gym, { type IGym } from "@/models/Gym";
 
 const MAX_RESULTS = 50;
+const MAX_WORDS = 6;
 
 const escapeRegex = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -15,17 +16,27 @@ export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
-    const q = (request.nextUrl.searchParams.get("q") ?? "").trim();
+    const q = request.nextUrl.searchParams.get("q") ?? "";
+    // "phoenix, az" is two words. Every word has to match the name, city,
+    // state or zip code, but different words may match different fields.
+    const words = q
+      .split(/[\s,]+/)
+      .filter(Boolean)
+      .slice(0, MAX_WORDS);
 
     const filter: QueryFilter<IGym> = {};
-    if (q) {
-      const match = new RegExp(escapeRegex(q), "i");
-      filter.$or = [
-        { name: match },
-        { "address.city": match },
-        { "address.state": match },
-        { "address.zipCode": match },
-      ];
+    if (words.length > 0) {
+      filter.$and = words.map((word) => {
+        const match = new RegExp(escapeRegex(word), "i");
+        return {
+          $or: [
+            { name: match },
+            { "address.city": match },
+            { "address.state": match },
+            { "address.zipCode": match },
+          ],
+        };
+      });
     }
 
     const gyms = await Gym.find(filter).sort({ name: 1 }).limit(MAX_RESULTS);
