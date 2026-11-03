@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "seed": "node --env-file=.env.local scripts/seed.mjs",
     "lint": "eslint",
     "test": "node --experimental-vm-modules --no-warnings ./node_modules/jest/bin/jest.js",
     "typecheck": "tsc --noEmit"
