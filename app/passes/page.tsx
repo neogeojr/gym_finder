@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { apiErrorMessage } from "@/lib/errors";
+import { passDate } from "@/lib/passDate";
 import type { Address, Pass } from "@/types";
 
 type MyPass = Omit<Pass, "gymId"> & {
@@ -43,9 +44,7 @@ export default function MyPassesPage() {
                 <p className="font-medium">Removed gym</p>
               )}
               <p className="text-sm">Code: {pass.code}</p>
-              <p className="text-sm">
-                Good on {new Date(pass.validFrom).toLocaleDateString()}
-              </p>
+              <p className="text-sm">Good on {passDate(pass.validFrom)}</p>
             </li>
           ))}
         </ul>

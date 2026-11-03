@@ -24,6 +24,12 @@ jest.mock("@/context/AuthContext", () => ({
 const mockGet = axios.get as jest.Mock;
 const mockPost = axios.post as jest.Mock;
 
+// The page asks for the gym, and (when logged in) for my passes.
+const serve = (g: object = gym, passes: object[] = []) =>
+  mockGet.mockImplementation((url: string) =>
+    Promise.resolve({ data: { data: url === "/api/passes" ? passes : g } }),
+  );
+
 const gym = {
   _id: "g1",
   name: "Iron Works",
@@ -44,7 +50,7 @@ beforeEach(() => {
 
 describe("gym details page", () => {
   test("Shows the name, address, phone and day pass.", async () => {
-    mockGet.mockResolvedValue({ data: { data: gym } });
+    serve();
     render(<GymDetails gymId="g1" />);
 
     expect(
@@ -66,7 +72,7 @@ describe("gym details page", () => {
 describe("claiming a day pass", () => {
   test("Success shows the code.", async () => {
     mockUser = { email: "sam@test.com" };
-    mockGet.mockResolvedValue({ data: { data: gym } });
+    serve();
     mockPost.mockResolvedValue({
       data: {
         data: { code: "abc123def456", validFrom: "2026-11-01T07:00:00.000Z" },
@@ -87,7 +93,7 @@ describe("claiming a day pass", () => {
   });
 
   test("A guest is sent to login.", async () => {
-    mockGet.mockResolvedValue({ data: { data: gym } });
+    serve();
     render(<GymDetails gymId="g1" />);
 
     await userEvent.click(
@@ -99,7 +105,7 @@ describe("claiming a day pass", () => {
 
   test("A refusal shows the server message.", async () => {
     mockUser = { email: "sam@test.com" };
-    mockGet.mockResolvedValue({ data: { data: gym } });
+    serve();
     mockPost.mockRejectedValue({
       response: {
         data: { error: "You already have a pass for this gym today." },
@@ -115,10 +121,32 @@ describe("claiming a day pass", () => {
     );
   });
 
+  test("A pass I already hold is shown instead of the button.", async () => {
+    mockUser = { email: "sam@test.com" };
+    const soon = new Date(Date.now() + 3600_000).toISOString();
+    serve(gym, [
+      { code: "other", status: "active", validTo: soon, gym: { _id: "g2" } },
+      {
+        code: "mine123",
+        status: "active",
+        validFrom: "2026-11-03T00:00:00.000Z",
+        validTo: soon,
+        gym: { _id: "g1" },
+      },
+    ]);
+    render(<GymDetails gymId="g1" />);
+
+    expect(
+      await screen.findByText("You already have a pass for this gym today."),
+    ).toBeVisible();
+    expect(screen.getByText("Your day pass code: mine123")).toBeVisible();
+    expect(
+      screen.queryByRole("button", { name: "Get day pass" }),
+    ).not.toBeInTheDocument();
+  });
+
   test("No button when the gym has no day pass.", async () => {
-    mockGet.mockResolvedValue({
-      data: { data: { ...gym, daypass: { available: false, price: 0 } } },
-    });
+    serve({ ...gym, daypass: { available: false, price: 0 } });
     render(<GymDetails gymId="g1" />);
     await screen.findByRole("heading", { name: "Iron Works" });
     expect(
