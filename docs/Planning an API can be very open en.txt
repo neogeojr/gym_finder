@@ -1,0 +1,42 @@
+Main Route:
+	API Endpoint = GET => “/” =>  Landing Page
+	This endpoint will show the starting point of my application and will be the first thing any User sees.
+
+Login Routes:
+	API Endpoint = GET => “/login” => Login Page
+	This endpoint will show the Login Page to a User
+
+	API Endpoint = POST => “/login” => Result
+	A successful response will respond with 200 and REDIRECT to the next part of an application.
+	An error response will respond with 400/404  and show Login errors 
+
+Register Routes:
+	API Endpoint  = POST => “/register” => Result
+	A successful response will respond with 201 and REDIRECT to the next part of an application
+	An error response will respond with 400 and show Register errors
+
+Profile Routes:
+	API Endpoint = GET => “/my_profile => Profile Page
+	A successful response will show the User Profile Page
+	A response may redirect to Login Page IF not Logged In
+	A response may show 401 Forbidden if applicable
+
+	API Endpoint = GET => “/my_profile/breeds/<husky> => Result
+	A successful response may show all “husky” dog breeds that are available for dog sitting
+	A response may redirect to login IF as User is NOT Logged In
+	A response may respond with 404 if no “husky” if a route is NOT found
+	A response may respond with 200 and and empty list if a response is empty
+
+User  Routes:
+	API Endpoint = GET => “/users => Result
+	A successful response will show all Users
+	We can sort Users by number of reviews in <query> params
+	A response may redirect to Login Page IF not Logged in
+	A response may show 401 Forbidden if applicable
+
+	API Endpoint = POST => /users/rate/<user_id> => Result
+	A successful response will respond with 200/201 that you have SUCCESSFULLY rated a User
+	A response may respond with 401/403 IF a User is NOT Logged In and redirect to Login/Register
+	A response may respond with 400 IF a User input error occurred
+	A response may respond with 500 IF a “general server error happened”
+

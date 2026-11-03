@@ -1,0 +1,41 @@
+I'm most interested in developing The "Space" capstone, using a NASA data explorer where the user chooses Mars rover missions or track near earth asteroids, with filter, visualizations options with a personal achieve of favorites.
+
+
+1. Space - https://api.nasa.gov/
+	Mars Rover Mission explorer
+		account log in/sign up
+		select a rover
+		browse photos by date
+		Learn mission details, dates, status, available scientific options
+		save/archive favorite photos: infinite scroll
+		Mission timeline page
+
+	Asteroid threat tracker
+		account log in
+		Save asteroid data/pictures
+		asteroid details/danger level
+		sorting danger levels
+		chart velocity, size, distance, threat level
+
+A personalized meal planning app that generates suggestions based on available ingredients, macro goals, food preferences, budget, then producing a grocery list.
+
+2. Nutrition - https://spoonacular.com/food-api || USAD FoodData Central (https://fdc.nal.usda.gov/api-guide#bkmk-7)
+	account log in to store personal preferences/data
+	Meal planning based on available ingredients
+	nutritional information for meals
+	Enter macros - get possible meals
+	Likes/dislikes options to help create meals
+	grocery list generator, with budget constraints
+	Recipe pages, detailing nutrition/costs
+
+
+A commute monitor that checks real time traffic events, sending text alerts when a routes is delayed or compromised.
+
+3. Commute Route checker - (https://developers.google.com/maps/documentation/routes)
+	User specific settings
+		Routes, distance and time thresholds for notifications, baselines
+	Suggest leave by times, if routes are compromised
+	Check commute times on routine routes
+	Texting via Twilio for delays
+
+	Weather and traffic notifications
