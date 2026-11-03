@@ -9,7 +9,22 @@ export async function GET(request: NextRequest) {
 
     const user = await getUser(request);
     if (!user) {
-      return NextResponse.json({ error: "Not logged in." }, { status: 401 });
+      const response = NextResponse.json(
+        { error: "Not logged in." },
+        { status: 401 },
+      );
+      // A cookie that no longer matches a user (expired, or the user was
+      // deleted) would keep /login and /signup locked, so clear it.
+      if (request.cookies.get("token")) {
+        response.cookies.set("token", "", {
+          httpOnly: true,
+          sameSite: "lax",
+          secure: process.env.NODE_ENV === "production",
+          path: "/",
+          maxAge: 0,
+        });
+      }
+      return response;
     }
 
     return NextResponse.json({ message: "User found", data: user });
