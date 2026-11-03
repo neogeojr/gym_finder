@@ -2,6 +2,8 @@
 
 Gym Finder is a small web app for finding gyms and claiming a free day pass. Anyone can search for a gym by name, city, state or zip code and open its page. A logged-in user can claim a day pass for a gym that offers one and see all of their passes in one list. Gym owners add, edit and delete their own gyms.
 
+Live site: https://gym-finder-gi1d.onrender.com/
+
 ## Who can do what
 
 | Action                               | Guest | Member | Owner              |
@@ -56,7 +58,7 @@ You need Node.js 20.9 or newer and a MongoDB database (a local MongoDB or a free
 | `DB_TEST_NAME` | Database name used when the tests run, so tests never touch real data.                       |
 | `JWT_SECRET`   | Long random string that signs the login cookie. Make one with the command in `.env.example`. |
 
-Never put real values in git. On a host such as Render, set them in the host's environment settings.
+Never put real values in git. On a host such as Render, set them in the host's environment settings. Step-by-step instructions for Atlas and Render are in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Scripts
 
@@ -65,6 +67,7 @@ Never put real values in git. On a host such as Render, set them in the host's e
 | `npm run dev`       | Start the development server.    |
 | `npm run build`     | Build the app for production.    |
 | `npm start`         | Run the production build.        |
+| `npm run seed`      | Add 10 sample Phoenix-area gyms. |
 | `npm test`          | Run all tests.                   |
 | `npm run lint`      | Check the code with ESLint.      |
 | `npm run typecheck` | Check the types with TypeScript. |
@@ -123,4 +126,35 @@ Run everything with `npm test`. The tests are small and focused, and live in `__
 
 ## What is not included yet
 
-Admin role and approval, review of edits to live gyms, cancelling and redeeming passes, login rate limiting, a profile page (changing email or password, deleting an account), search filters, amenities, website, hours and day pass type, a seed script, maps, pictures and QR codes.
+Admin role and approval, review of edits to live gyms, cancelling and redeeming passes, login rate limiting, a profile page (changing email or password, deleting an account), search filters, amenities, website, hours and day pass type, maps, pictures and QR codes.
+
+## Stretch goals
+
+Version 1 is complete on its own. These are the next steps, in the order I would take them. Each one would go on its own branch and finish with the app working and the tests passing.
+
+### Use real data
+
+The 10 gyms from `npm run seed` are made up. A real version would:
+
+- Import real gyms in the Phoenix area from a public source such as OpenStreetMap, or from gym owners who sign up, using a script like the seed script and following the source's terms of use.
+- Keep real phone numbers, prices and opening hours accurate, for example by asking each owner to confirm their gym's details.
+- Add real accounts safely: email confirmation at signup, password reset, and a real address for the live site's support questions.
+
+### Layers
+
+| Layer                     | What it adds                                                                                                                           |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Pass lifecycle         | Members cancel a pass. Owners see the passes for their gyms, look one up by its code and mark it redeemed. Old passes show as expired. |
+| 2. Better search          | Free or paid day pass filter.                                                                                                          |
+| 3. Accounts               | A profile page, changing email or password, and deleting an account (which also removes that user's gyms and passes).                  |
+| 4. Login rate limiting    | Block repeated failed logins with a 429 response and a Retry-After header.                                                             |
+| 5. Admin and approval     | An admin role, owners who must be approved, new gyms that wait for an admin to publish them, and an admin dashboard.                   |
+| 6. Edit review            | An owner's edit to a published gym waits for an admin to approve it.                                                                   |
+| 7. Richer gym information | Amenities, website, free or paid day pass type, and opening hours.                                                                     |
+| 8. Extras                 | Maps and distance search, picture uploads, and QR-code passes. Each is a small project of its own.                                     |
+
+### Smaller ideas
+
+- End-to-end browser tests with Playwright, covering the sign up, add gym, claim pass flow.
+- A unique database index so two claims at the same instant cannot both create a pass.
+- Reviews and ratings for gyms.
